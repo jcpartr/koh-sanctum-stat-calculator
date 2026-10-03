@@ -1,21 +1,224 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-r-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanctum Stats Calculator</title>
-
-    <style>
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanctum Stats Calculator</title>
+  <link rel="stylesheet" href="assets/runestrap.css">
+  <style>
+    body {
+      min-height: 100vh;
+      padding: clamp(1rem, 4vw, 3rem);
+    }
+    .calculator {
+      max-width: 76rem;
+      margin: 0 auto;
+    }
+    .calculator-heading {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 3px double var(--r-border);
+    }
+    .calculator-heading h1 {
+      color: var(--r-primary);
+      font-variant: small-caps;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: .5rem;
+    }
+    .calculator-heading p {
+      color: var(--r-muted);
+      max-width: 36rem;
+      margin: 0 auto;
+    }
+    .stat-card { height: 100%; }
+    .stat-card .r-card-header {
+      display: flex;
+      align-items: baseline;
+      gap: .75rem;
+      border-bottom: 3px double var(--r-border);
+    }
+    .stat-card h2 { margin: 0; font-size: 1.6rem; }
+    .chapter-number { color: var(--r-primary); }
+    .stat-rate {
+      margin-bottom: 1.25rem;
+      font-style: italic;
+      font-size: .875rem;
+      color: var(--r-muted);
+    }
+    .rank-fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .rank-fields > div { min-width: 0; }
+    .cost-section {
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--r-border);
+    }
+    .cost-field:disabled {
+      opacity: 1;
+      color: var(--r-primary);
+      background: color-mix(in srgb, var(--r-primary) 5%, var(--r-surface));
+      font-size: 1.75rem;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.25;
+    }
+    .calculator-footnote {
+      margin: 1.5rem 0 0;
+      text-align: center;
+      color: var(--r-muted);
+      font-size: .875rem;
+      font-style: italic;
+    }
+    @media (max-width: 575px) {
+      .calculator { padding: 1.25rem; }
+      .calculator-heading { margin-bottom: 1.5rem; }
+      .stat-card .r-card-body { padding: 1.25rem; }
+    }
+  </style>
 </head>
-
 <body>
+  <main class="r-paper r-book calculator" aria-labelledby="calculator-title">
+    <header class="calculator-heading">
+      <h1 id="calculator-title">Sanctum Stats Calculator</h1>
+      <p>Choose your current and target values to calculate the cost.</p>
+    </header>
 
+    <div class="r-row r-g-4">
+      <section class="r-col-12 r-col-lg-4" aria-labelledby="skill-heading">
+        <div class="r-card stat-card">
+          <div class="r-card-header">
+            <span class="chapter-number" aria-hidden="true">I.</span>
+            <h2 id="skill-heading">Skills</h2>
+          </div>
+          <div class="r-card-body">
+            <p class="stat-rate">Cost per rank: 5 × the new rank</p>
+            <div class="rank-fields">
+              <div>
+                <label class="r-form-label" for="skill-from">Current rank</label>
+                <input class="r-form-control" id="skill-from" type="number" min="0" value="0">
+              </div>
+              <div>
+                <label class="r-form-label" for="skill-to">Target rank</label>
+                <input class="r-form-control" id="skill-to" type="number" min="1" value="1">
+              </div>
+            </div>
+            <div class="cost-section">
+              <label class="r-form-label" for="skill-cost">Skill cost</label>
+              <input class="r-form-control cost-field" id="skill-cost" type="number" min="0" disabled>
+            </div>
+          </div>
+        </div>
+      </section>
 
+      <section class="r-col-12 r-col-lg-4" aria-labelledby="resource-heading">
+        <div class="r-card stat-card">
+          <div class="r-card-header">
+            <span class="chapter-number" aria-hidden="true">II.</span>
+            <h2 id="resource-heading">Resources</h2>
+          </div>
+          <div class="r-card-body">
+            <p class="stat-rate">Cost per rank: 15 × the new rank</p>
+            <div class="rank-fields">
+              <div>
+                <label class="r-form-label" for="resource-from">Current rank</label>
+                <input class="r-form-control" id="resource-from" type="number" min="0" value="0">
+              </div>
+              <div>
+                <label class="r-form-label" for="resource-to">Target rank</label>
+                <input class="r-form-control" id="resource-to" type="number" min="1" value="1">
+              </div>
+            </div>
+            <div class="cost-section">
+              <label class="r-form-label" for="resource-cost">Resource cost</label>
+              <input class="r-form-control cost-field" id="resource-cost" type="number" min="0" disabled>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<script>
-  
-</script>
+      <section class="r-col-12 r-col-lg-4" aria-labelledby="attribute-heading">
+        <div class="r-card stat-card">
+          <div class="r-card-header">
+            <span class="chapter-number" aria-hidden="true">III.</span>
+            <h2 id="attribute-heading">Attributes</h2>
+          </div>
+          <div class="r-card-body">
+            <p class="stat-rate">Cost per rank: 25 × the new rank</p>
+            <div class="rank-fields">
+              <div>
+                <label class="r-form-label" for="attribute-from">Current rank</label>
+                <input class="r-form-control" id="attribute-from" type="number" min="0" value="0">
+              </div>
+              <div>
+                <label class="r-form-label" for="attribute-to">Target rank</label>
+                <input class="r-form-control" id="attribute-to" type="number" min="1" value="1">
+              </div>
+            </div>
+            <div class="cost-section">
+              <label class="r-form-label" for="attribute-cost">Attribute cost</label>
+              <input class="r-form-control cost-field" id="attribute-cost" type="number" min="0" disabled>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
 
+  <script src="assets/runestrap.js"></script>
+  <script>
+    function sumTotal(num, price) {
+      return ((num * price) * (num + 1)) / 2
+    }
+
+    function calcDifference(to, from, price) {
+      return sumTotal(to, price) - sumTotal(from, price);
+    }
+
+    function handleChange(toEl, fromEl, calcEl, price) {
+      var toVal = toEl.valueAsNumber;
+      var fromVal = fromEl.valueAsNumber;
+
+      if (toVal <= fromVal) {
+        toEl.value = fromVal + 1;
+        toVal = toEl.valueAsNumber;
+      }
+
+      calcEl.value = calcDifference(toVal, fromVal, price);
+    }
+
+    document.addEventListener('DOMContentLoaded', (e) => {
+      const skillFrom = document.getElementById('skill-from');
+      const skillTo = document.getElementById('skill-to');
+      const skillCost = document.getElementById('skill-cost');
+
+      const attributeFrom = document.getElementById('attribute-from');
+      const attributeTo = document.getElementById('attribute-to');
+      const attributeCost = document.getElementById('attribute-cost');
+
+      const resourceFrom = document.getElementById('resource-from');
+      const resourceTo = document.getElementById('resource-to');
+      const resourceCost = document.getElementById('resource-cost');
+
+      function handleAllChanges() {
+        handleChange(skillTo, skillFrom, skillCost, 5);
+        handleChange(resourceTo, resourceFrom, resourceCost, 15);
+        handleChange(attributeTo, attributeFrom, attributeCost, 25);
+      }
+
+      skillFrom.addEventListener('change', handleAllChanges);
+      skillTo.addEventListener('change', handleAllChanges);
+
+      resourceFrom.addEventListener('change', handleAllChanges);
+      resourceTo.addEventListener('change', handleAllChanges);
+
+      attributeFrom.addEventListener('change', handleAllChanges);
+      attributeTo.addEventListener('change', handleAllChanges);
+
+      handleAllChanges();
+    });
+  </script>
 </body>
 </html>
